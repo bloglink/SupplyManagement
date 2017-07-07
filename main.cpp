@@ -5,7 +5,13 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     MainScreen w;
-    w.show();
+    int ret = w.login();
+    if (ret == QDialog::Rejected) {
+        return 0;
+    }
+    if (ret == QDialog::Accepted) {
+        w.show();
+    }
 
     return a.exec();
 }
