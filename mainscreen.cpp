@@ -48,7 +48,7 @@ void MainScreen::initUI()
     ext->setFocusPolicy(Qt::NoFocus);
     ext->setIconSize(QSize(25,25));
     ext->resize(25,25);
-    connect(ext,SIGNAL(clicked(bool)),this,SLOT(close()));
+    connect(ext,SIGNAL(clicked(bool)),this,SLOT(animationHide()));
 
     QToolButton *app = new QToolButton(this);
     app->setIcon(QIcon(":/icons/app.png"));
@@ -161,4 +161,21 @@ void MainScreen::stackChange(QByteArray win)
             break;
         }
     }
+}
+
+void MainScreen::animationHide()
+{
+    QPropertyAnimation *animation = new QPropertyAnimation(this, "windowOpacity");
+    connect(animation, SIGNAL(finished()), this, SLOT(animationClose()));
+    animation->setDuration(500);
+    animation->setStartValue(1);
+    animation->setEndValue(0);
+    animation->start();
+}
+
+void MainScreen::animationClose()
+{
+    this->hide();
+    QTimer *timer = new QTimer(this);
+    timer->singleShot(50,this,SLOT(close()));
 }

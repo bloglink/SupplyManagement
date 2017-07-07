@@ -6,6 +6,7 @@
 #include <QApplication>
 #include <QStackedWidget>
 #include <QSystemTrayIcon>
+#include <QPropertyAnimation>
 
 #include "loginscreen.h"
 class MainScreen : public QMainWindow
@@ -26,6 +27,8 @@ private slots:
     void initToolButton(QToolButton *btn);
     void readToolButton();
     void stackChange(QByteArray win);
+    void animationHide();
+    void animationClose();
 private:
     QStackedWidget *stack;
 };
