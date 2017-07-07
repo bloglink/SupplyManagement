@@ -120,6 +120,7 @@ void MainScreen::initUI()
     layout->setMargin(0);
 
     stack = new QStackedWidget(this);
+    stack->addWidget(new AboutUsScreen(this));
 
     QVBoxLayout* main_layout = new QVBoxLayout;
     main_layout->addLayout(title);

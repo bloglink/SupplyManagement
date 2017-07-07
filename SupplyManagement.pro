@@ -14,10 +14,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainscreen.cpp \
-    loginscreen.cpp
+    loginscreen.cpp \
+    aboutusscreen.cpp
 
 HEADERS  += mainscreen.h \
-    loginscreen.h
+    loginscreen.h \
+    aboutusscreen.h
 
 RESOURCES += \
     source.qrc

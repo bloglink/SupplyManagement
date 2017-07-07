@@ -9,6 +9,8 @@
 #include <QPropertyAnimation>
 
 #include "loginscreen.h"
+#include "aboutusscreen.h"
+
 class MainScreen : public QMainWindow
 {
     Q_OBJECT
