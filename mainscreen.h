@@ -12,6 +12,7 @@
 #include "loginscreen.h"
 #include "aboutusscreen.h"
 #include "usermanagerment.h"
+#include "rolemanagerment.h"
 
 class MainScreen : public QMainWindow
 {
@@ -39,6 +40,7 @@ private:
     QStackedWidget *stack;
     UdpSocket udp;
     UserManagerment *user;
+    RoleManagerment *role;
 };
 
 #endif // MAINSCREEN_H

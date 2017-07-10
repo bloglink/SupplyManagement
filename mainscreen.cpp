@@ -138,6 +138,11 @@ void MainScreen::initUI()
     connect(user,SIGNAL(sendSocket(QUrl)),this,SIGNAL(sendSocket(QUrl)));
     connect(this,SIGNAL(sendMsg(QUrl)),user,SLOT(recvSocket(QUrl)));
     stack->addWidget(user);
+
+    role = new RoleManagerment(this);
+    connect(role,SIGNAL(sendSocket(QUrl)),this,SIGNAL(sendSocket(QUrl)));
+    connect(this,SIGNAL(sendMsg(QUrl)),role,SLOT(recvSocket(QUrl)));
+    stack->addWidget(role);
 }
 
 void MainScreen::initUdp()
