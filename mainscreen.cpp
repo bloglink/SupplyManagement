@@ -4,6 +4,7 @@ MainScreen::MainScreen(QWidget *parent)
     : QMainWindow(parent)
 {
     initUI();
+    initUdp();
 }
 
 MainScreen::~MainScreen()
@@ -132,6 +133,11 @@ void MainScreen::initUI()
     desktop->setLayout(main_layout);
     setCentralWidget(desktop);
     this->resize(1280,900);
+}
+
+void MainScreen::initUdp()
+{
+    udp.initSocket();
 }
 void MainScreen::swithMaxNormal()
 {

@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -15,11 +15,13 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainscreen.cpp \
     loginscreen.cpp \
-    aboutusscreen.cpp
+    aboutusscreen.cpp \
+    udpsocket.cpp
 
 HEADERS  += mainscreen.h \
     loginscreen.h \
-    aboutusscreen.h
+    aboutusscreen.h \
+    udpsocket.h
 
 RESOURCES += \
     source.qrc

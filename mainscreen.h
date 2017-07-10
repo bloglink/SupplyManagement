@@ -8,6 +8,7 @@
 #include <QSystemTrayIcon>
 #include <QPropertyAnimation>
 
+#include "udpsocket.h"
 #include "loginscreen.h"
 #include "aboutusscreen.h"
 
@@ -25,6 +26,7 @@ public:
     int login();
 private slots:
     void initUI();
+    void initUdp();
     void swithMaxNormal();
     void initToolButton(QToolButton *btn);
     void readToolButton();
@@ -33,6 +35,7 @@ private slots:
     void animationClose();
 private:
     QStackedWidget *stack;
+    UdpSocket udp;
 };
 
 #endif // MAINSCREEN_H
