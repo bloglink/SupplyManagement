@@ -187,7 +187,7 @@ void LoginScreen::recvSocket(QUrl url)
     QString usr = url.userName();
     if (usr != "loginscreen")
         return;
-    if (cmd == "login")
+    if (cmd == "action")
         this->accept();
     if (cmd == "error")
         QMessageBox::warning(this,"",tr("登录失败"));

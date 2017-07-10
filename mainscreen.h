@@ -33,6 +33,7 @@ private slots:
     void stackChange(QByteArray win);
     void animationHide();
     void animationClose();
+    void recvSocket(QUrl url);
 private:
     QStackedWidget *stack;
     UdpSocket udp;

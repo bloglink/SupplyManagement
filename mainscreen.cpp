@@ -138,6 +138,8 @@ void MainScreen::initUI()
 void MainScreen::initUdp()
 {
     udp.initSocket();
+    connect(this,SIGNAL(sendSocket(QUrl)),&udp,SLOT(sendSocket(QUrl)));
+    connect(&udp,SIGNAL(recvSocket(QUrl)),this,SLOT(recvSocket(QUrl)));
 }
 void MainScreen::swithMaxNormal()
 {
@@ -185,4 +187,24 @@ void MainScreen::animationClose()
     this->hide();
     QTimer *timer = new QTimer(this);
     timer->singleShot(50,this,SLOT(close()));
+}
+
+void MainScreen::recvSocket(QUrl url)
+{
+    QString cmd = url.query();
+    emit sendMsg(url);
+    if (cmd == "action" || cmd == "error") {
+        url.setUserName("loginscreen");
+        emit sendMsg(url);
+    } else if (cmd == "userinfo") {
+        url.setUserName("usermanagerment");
+        emit sendMsg(url);
+    } else if (cmd == "roleinfo") {
+        url.setUserName("usermanagerment");
+        emit sendMsg(url);
+        url.setUserName("rolemanagerment");
+        emit sendMsg(url);
+    } else {
+        qDebug() << "recv others" << url.toString();
+    }
 }
