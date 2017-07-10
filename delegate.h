@@ -1,0 +1,91 @@
+#ifndef DELEGATE_H
+#define DELEGATE_H
+
+#include <QItemDelegate>
+#include <QStandardItemModel>
+#include <QModelIndex>
+#include <QObject>
+#include <QSize>
+#include <QSpinBox>
+#include <QLineEdit>
+#include <QComboBox>
+#include <QApplication>
+#include <QListView>
+#include <QSpinBox>
+#include <QComboBox>
+#include <QDoubleSpinBox>
+#include <QItemDelegate>
+#include <QStandardItemModel>
+#include <QStyledItemDelegate>
+
+//编号列，只读委托
+class ReadOnlyDelegate : public QItemDelegate
+{
+    Q_OBJECT
+public:
+    ReadOnlyDelegate(QObject *parent = 0): QItemDelegate(parent) { }
+    QWidget *createEditor(QWidget*, const QStyleOptionViewItem &,
+                          const QModelIndex &) const
+    {
+        return NULL;
+    }
+};
+
+//代理类，把所有单元格中的字符居中显示
+class StandardItemModel : public QStandardItemModel
+{
+    Q_OBJECT
+public:
+    StandardItemModel(QObject *parent=NULL) : QStandardItemModel(parent) { }
+    StandardItemModel(int row, int column, QObject *parent=NULL)
+        : QStandardItemModel(row, column, parent) { }
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const
+    {
+        if( Qt::TextAlignmentRole == role )
+            return Qt::AlignCenter;
+        return QStandardItemModel::data(index, role);
+    }
+};
+
+//利用QComboBox委托对输入进行限制
+class ComboBoxDelegate : public QItemDelegate
+{
+    Q_OBJECT
+public:
+    QStringList headers;
+    ComboBoxDelegate(QObject *parent = 0): QItemDelegate(parent) { }
+    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &,
+                          const QModelIndex &) const
+    {
+        QComboBox *editor = new QComboBox(parent);
+        editor->setItemDelegate(new QStyledItemDelegate());
+        for (int i=0; i < headers.size(); i++)
+            editor->addItem(headers.at(i));
+        return editor;
+    }
+    void setEditorData(QWidget *editor, const QModelIndex &index) const
+    {
+        QString text = index.model()->data(index, Qt::EditRole).toString();
+        QComboBox *comboBox = static_cast<QComboBox*>(editor);
+        int tindex = comboBox->findText(text);
+        comboBox->setCurrentIndex(tindex);
+    }
+    void setModelData(QWidget *editor, QAbstractItemModel *model,
+                      const QModelIndex &index) const
+    {
+        QComboBox *comboBox = static_cast<QComboBox*>(editor);
+        QString text = comboBox->currentText();
+        model->setData(index, text, Qt::EditRole);
+    }
+    void updateEditorGeometry(QWidget *editor,
+                              const QStyleOptionViewItem &option, const QModelIndex &) const
+    {
+        editor->setGeometry(option.rect);
+        QComboBox *comboBox = static_cast<QComboBox*>(editor);
+        comboBox->showPopup();
+    }
+    void setItemHeaders(QStringList heads) {
+        headers = heads;
+    }
+};
+#endif // DELEGATE_H

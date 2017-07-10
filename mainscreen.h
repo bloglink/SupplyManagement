@@ -11,6 +11,7 @@
 #include "udpsocket.h"
 #include "loginscreen.h"
 #include "aboutusscreen.h"
+#include "usermanagerment.h"
 
 class MainScreen : public QMainWindow
 {
@@ -37,6 +38,7 @@ private slots:
 private:
     QStackedWidget *stack;
     UdpSocket udp;
+    UserManagerment *user;
 };
 
 #endif // MAINSCREEN_H

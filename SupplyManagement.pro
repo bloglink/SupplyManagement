@@ -16,12 +16,15 @@ SOURCES += main.cpp\
         mainscreen.cpp \
     loginscreen.cpp \
     aboutusscreen.cpp \
-    udpsocket.cpp
+    udpsocket.cpp \
+    usermanagerment.cpp
 
 HEADERS  += mainscreen.h \
     loginscreen.h \
     aboutusscreen.h \
-    udpsocket.h
+    udpsocket.h \
+    usermanagerment.h \
+    delegate.h
 
 RESOURCES += \
     source.qrc

@@ -133,6 +133,11 @@ void MainScreen::initUI()
     desktop->setLayout(main_layout);
     setCentralWidget(desktop);
     this->resize(1280,900);
+
+    user = new UserManagerment(this);
+    connect(user,SIGNAL(sendSocket(QUrl)),this,SIGNAL(sendSocket(QUrl)));
+    connect(this,SIGNAL(sendMsg(QUrl)),user,SLOT(recvSocket(QUrl)));
+    stack->addWidget(user);
 }
 
 void MainScreen::initUdp()
