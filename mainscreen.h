@@ -7,6 +7,7 @@
 #include <QStackedWidget>
 #include <QSystemTrayIcon>
 #include <QPropertyAnimation>
+#include <QParallelAnimationGroup>
 
 #include "udpsocket.h"
 #include "loginscreen.h"
@@ -36,11 +37,14 @@ private slots:
     void animationHide();
     void animationClose();
     void recvSocket(QUrl url);
+
+    virtual void cloudAntimation();
 private:
     QStackedWidget *stack;
     UdpSocket udp;
     UserManagerment *user;
     RoleManagerment *role;
+    int preindex;
 };
 
 #endif // MAINSCREEN_H

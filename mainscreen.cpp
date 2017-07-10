@@ -5,6 +5,7 @@ MainScreen::MainScreen(QWidget *parent)
 {
     initUI();
     initUdp();
+    preindex = 0;
 }
 
 MainScreen::~MainScreen()
@@ -177,6 +178,8 @@ void MainScreen::stackChange(QByteArray win)
     for (int i=0; i < stack->count(); i++) {
         if (stack->widget(i)->objectName() == win) {
             stack->setCurrentIndex(i);
+            cloudAntimation();
+            preindex = i;
             break;
         }
     }
@@ -217,4 +220,53 @@ void MainScreen::recvSocket(QUrl url)
     } else {
         qDebug() << "recv others" << url.toString();
     }
+}
+
+void MainScreen::cloudAntimation()
+{
+    QLabel* circle = new QLabel(stack->currentWidget());
+    QLabel* line = new QLabel(this);
+    line->setObjectName(QString("AntimationLine"));
+    line->resize(0, 2);
+    line->show();
+
+    circle->setPixmap(stack->widget(preindex)->grab());
+
+    circle->show();
+    circle->resize(stack->currentWidget()->size());
+    QPropertyAnimation *animation = new QPropertyAnimation(circle, "geometry");
+
+    animation->setDuration(1000);
+    animation->setStartValue(circle->geometry());
+
+    QPropertyAnimation* animation_line = new QPropertyAnimation(line, "size");
+    animation_line->setDuration(1000);
+    animation_line->setEasingCurve(QEasingCurve::OutCubic);
+
+    animation->setEndValue(QRect(-3, 0, 0, circle->height()));
+    line->move(stack->x(), stack->y() - 2);
+    animation_line->setStartValue(QSize(0, 2));
+    animation_line->setEndValue(QSize(stack->width(), 2));
+
+    animation->setEasingCurve(QEasingCurve::OutCubic);
+
+    QPropertyAnimation* animation_opacity = new QPropertyAnimation(circle, "windowOpacity");
+    animation_opacity->setDuration(1000);
+    animation_opacity->setStartValue(1);
+    animation_opacity->setEndValue(0);
+    animation_opacity->setEasingCurve(QEasingCurve::OutCubic);
+
+    QParallelAnimationGroup *group = new QParallelAnimationGroup;
+
+    connect(group,SIGNAL(finished()), circle, SLOT(hide()));
+    connect(group,SIGNAL(finished()), circle, SLOT(deleteLater()));
+    connect(group,SIGNAL(finished()), line, SLOT(deleteLater()));
+    connect(group,SIGNAL(finished()), group, SLOT(deleteLater()));
+    connect(group,SIGNAL(finished()), animation, SLOT(deleteLater()));
+    connect(group,SIGNAL(finished()), animation_opacity, SLOT(deleteLater()));
+    connect(group,SIGNAL(finished()), animation_line, SLOT(deleteLater()));
+    group->addAnimation(animation);
+    group->addAnimation(animation_opacity);
+    group->addAnimation(animation_line);
+    group->start();
 }
