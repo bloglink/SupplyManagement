@@ -18,7 +18,8 @@ SOURCES += main.cpp\
     aboutusscreen.cpp \
     udpsocket.cpp \
     usermanagerment.cpp \
-    rolemanagerment.cpp
+    rolemanagerment.cpp \
+    ordermanagement.cpp
 
 HEADERS  += mainscreen.h \
     loginscreen.h \
@@ -26,7 +27,8 @@ HEADERS  += mainscreen.h \
     udpsocket.h \
     usermanagerment.h \
     delegate.h \
-    rolemanagerment.h
+    rolemanagerment.h \
+    ordermanagement.h
 
 RESOURCES += \
     source.qrc

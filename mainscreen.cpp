@@ -86,6 +86,7 @@ void MainScreen::initUI()
     title_about->setObjectName("aboutusscreen");
     title_users->setObjectName("usermanagerment");
     title_roles->setObjectName("rolemanagerment");
+    title_order->setObjectName("ordermanagement");
 
     initToolButton(title_order);
     initToolButton(title_product);
@@ -144,6 +145,11 @@ void MainScreen::initUI()
     connect(role,SIGNAL(sendSocket(QUrl)),this,SIGNAL(sendSocket(QUrl)));
     connect(this,SIGNAL(sendMsg(QUrl)),role,SLOT(recvSocket(QUrl)));
     stack->addWidget(role);
+
+    order = new OrderManagement(this);
+    connect(order,SIGNAL(sendSocket(QUrl)),this,SIGNAL(sendSocket(QUrl)));
+    connect(this,SIGNAL(sendMsg(QUrl)),order,SLOT(recvSocket(QUrl)));
+    stack->addWidget(order);
 }
 
 void MainScreen::initUdp()
@@ -177,6 +183,8 @@ void MainScreen::stackChange(QByteArray win)
 {
     for (int i=0; i < stack->count(); i++) {
         if (stack->widget(i)->objectName() == win) {
+            if (preindex == i)
+                break;
             stack->setCurrentIndex(i);
             cloudAntimation();
             preindex = i;
@@ -216,6 +224,12 @@ void MainScreen::recvSocket(QUrl url)
         url.setUserName("usermanagerment");
         emit sendMsg(url);
         url.setUserName("rolemanagerment");
+        emit sendMsg(url);
+    } else if (cmd == "orderinfo") {
+        url.setUserName("ordermanagement");
+        emit sendMsg(url);
+    } else if (cmd == "saleinfo" || cmd == "customerinfo" || cmd == "pmstayinfo") {
+        url.setUserName("ordermanagement");
         emit sendMsg(url);
     } else {
         qDebug() << "recv others" << url.toString();
@@ -269,4 +283,39 @@ void MainScreen::cloudAntimation()
     group->addAnimation(animation_opacity);
     group->addAnimation(animation_line);
     group->start();
+}
+
+void MainScreen::mousePressEvent(QMouseEvent *e)
+{
+    if(e->button() & Qt::LeftButton) {
+        if(e->y() < this->height() and e->x() > this->width() - 120) {
+            leftbuttonpressed = false;
+        } else {
+            dragPosition = e->globalPos() - frameGeometry().topLeft();
+            leftbuttonpressed = true;
+        }
+    }
+    e->accept();
+}
+
+void MainScreen::mouseReleaseEvent(QMouseEvent *e)
+{
+    leftbuttonpressed = false;
+    e->accept();
+}
+
+void MainScreen::mouseMoveEvent(QMouseEvent *e)
+{
+    if(isMaximized()) {
+        e->ignore();
+    } else {
+        if(e->y() < this->height() and e->x() > this->width() - 120) {
+            e->ignore();
+        } else {
+            if(leftbuttonpressed) {
+                move(e->globalPos() - dragPosition);
+                e->accept();
+            }
+        }
+    }
 }

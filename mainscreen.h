@@ -14,6 +14,7 @@
 #include "aboutusscreen.h"
 #include "usermanagerment.h"
 #include "rolemanagerment.h"
+#include "ordermanagement.h"
 
 class MainScreen : public QMainWindow
 {
@@ -39,11 +40,17 @@ private slots:
     void recvSocket(QUrl url);
 
     virtual void cloudAntimation();
+    virtual void mousePressEvent(QMouseEvent *e);
+    virtual void mouseReleaseEvent(QMouseEvent *e);
+    virtual void mouseMoveEvent(QMouseEvent *e);
 private:
+    bool leftbuttonpressed;
+    QPoint dragPosition;
     QStackedWidget *stack;
     UdpSocket udp;
     UserManagerment *user;
     RoleManagerment *role;
+    OrderManagement *order;
     int preindex;
 };
 

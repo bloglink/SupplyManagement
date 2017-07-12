@@ -21,5 +21,7 @@
         <file>icons/user.png</file>
         <file>skins/bu_bk.css</file>
         <file>skins/gn_bu.css</file>
+        <file>icons/left.png</file>
+        <file>icons/right.png</file>
     </qresource>
 </RCC>

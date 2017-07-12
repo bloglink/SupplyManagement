@@ -11,12 +11,15 @@
 #include <QComboBox>
 #include <QApplication>
 #include <QListView>
-#include <QSpinBox>
-#include <QComboBox>
-#include <QDoubleSpinBox>
+
 #include <QItemDelegate>
 #include <QStandardItemModel>
 #include <QStyledItemDelegate>
+#include <QSpinBox>
+#include <QDateEdit>
+#include <QComboBox>
+#include <QDoubleSpinBox>
+#include <QCalendarWidget>
 
 //编号列，只读委托
 class ReadOnlyDelegate : public QItemDelegate
@@ -47,7 +50,7 @@ public:
     }
 };
 
-//利用QComboBox委托对输入进行限制
+//利用 QComboBox 委托对输入进行限制
 class ComboBoxDelegate : public QItemDelegate
 {
     Q_OBJECT
@@ -55,10 +58,13 @@ public:
     QStringList headers;
     ComboBoxDelegate(QObject *parent = 0): QItemDelegate(parent) { }
     QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &,
-                          const QModelIndex &) const
+                          const QModelIndex &index) const
     {
+        if (index.column() == 0)
+            return 0;
         QComboBox *editor = new QComboBox(parent);
         editor->setItemDelegate(new QStyledItemDelegate());
+        editor->setEditable(true);
         for (int i=0; i < headers.size(); i++)
             editor->addItem(headers.at(i));
         return editor;
@@ -86,6 +92,44 @@ public:
     }
     void setItemHeaders(QStringList heads) {
         headers = heads;
+    }
+};
+
+//利用 QDateEdit 委托对输入进行限制
+class DateEditDelegate : public QItemDelegate
+{
+    Q_OBJECT
+public:
+    QStringList headers;
+    DateEditDelegate(QObject *parent = 0): QItemDelegate(parent) { }
+    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &,
+                          const QModelIndex &index) const
+    {
+        if (index.column() == 0)
+            return 0;
+        QDateEdit *editor = new QDateEdit(parent);
+        editor->setCalendarPopup(true);
+        editor->setDate(QDate::currentDate());
+        editor->setDisplayFormat("yyyyMMdd");
+        return editor;
+    }
+    void setEditorData(QWidget *editor, const QModelIndex &index) const
+    {
+        QDate value = index.model()->data(index, Qt::EditRole).toDate();
+        QDateEdit *dateEdit = static_cast<QDateEdit*>(editor);
+        dateEdit->setDate(value);
+    }
+    void setModelData(QWidget *editor, QAbstractItemModel *model,
+                      const QModelIndex &index) const
+    {
+        QDateEdit *dateEdit = static_cast<QDateEdit*>(editor);
+        QString value = dateEdit->date().toString("yyyyMMdd");
+        model->setData(index, value, Qt::EditRole);
+    }
+    void updateEditorGeometry(QWidget *editor,
+                              const QStyleOptionViewItem &option, const QModelIndex &) const
+    {
+        editor->setGeometry(option.rect);
     }
 };
 #endif // DELEGATE_H
