@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui network
+QT       += core gui network xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     udpsocket.cpp \
     usermanagerment.cpp \
     rolemanagerment.cpp \
-    ordermanagement.cpp
+    ordermanagement.cpp \
+    productionmanagement.cpp
 
 HEADERS  += mainscreen.h \
     loginscreen.h \
@@ -28,7 +29,8 @@ HEADERS  += mainscreen.h \
     usermanagerment.h \
     delegate.h \
     rolemanagerment.h \
-    ordermanagement.h
+    ordermanagement.h \
+    productionmanagement.h
 
 RESOURCES += \
     source.qrc
